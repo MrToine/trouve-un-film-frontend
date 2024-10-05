@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block title %}Liste des films{% endblock %}
+
+{% block content %}
+<section class="movie-detail">
+            <div class="detail-like">
+                {% if movie.liked_by_user == True %}
+                    <a href="{% url 'unlike_movie' movie.id %}" class="liked">
+                        <i class="fa-solid fa-heart"></i>
+                    </a>
+                {% else %}
+                    <a href="{% url 'like_movie' movie.id %}">
+                        <i class="fa-regular fa-heart"></i>
+                    </a>
+                {% endif %}
+            </div>
+            <center>
+                <h1>{{ movie.title }}</h1>
+                <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+            </center>
+            <h2>Synopsis</h2>
+            <p>{{ movie.synopsis }}</p>
+            <p><strong>Sortie le {{ movie.day }}/{{ movie.month }}/{{ movie.year }}</strong></p>
+        </section>
+        <section>
+            <h2>Genres</h2>
+            <ul>
+                {% for genre in movie.genres %}
+                    <li>{{ genre.name }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+        <section>
+            <h2>Acteurs</h2>
+            <ul>
+                {% for actor in movie.actors %}
+                    <li>{{ actor.name }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+        <section>
+            <h2>Realisateurs</h2>
+            <ul>
+                {% for realisator in movie.realisators %}
+                    <li>{{ realisator.name }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+    <p><a href="{% url 'movies_list' %}">Back to Movies List</a></p>
+{% endblock %}

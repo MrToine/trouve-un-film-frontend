@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}Movie Recommendation Form{% endblock %}
+
+{% block content %}
+    <main>
+        <center>
+        
+        <form action="{% url 'reco_results' %}" method="POST">
+            {% csrf_token %}
+            <section>
+                <h2>Genres</h2>
+                <label for="genres">Indiquez le ou les genres que vous appréciez <small style="color:brown">(Si plusieurs, séparez les par des virgules)</small>:</label>
+                <input type="text" name="genres" >
+            </section>
+            <section>
+                <h2>Avec </h2>
+                <label for="actors">Selectionnez le ou les acteurs que vous appréciez <small style="color:brown">(Si plusieurs, séparez les par des virgules)</small>:</label>
+                <input type="text" name="actors">
+            </section>
+            <section>
+                <h2>Réalisation</h2>
+                <label for="realisator">Selectionnez botre réalisateur préféré :</label>
+                <input type="text" name="realisator">
+            </section>
+            <section>
+                <h2>Nombre de films recommandés</h2>
+                <label for="nb_movies">Combien de films souhaitez-vous que nous vous recommandions ?</label>
+                <select name="top_n" id="">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+            </section>
+            <button type="submit">Obtenir des recommendations</button>
+        </form>
+    </main>
+{% endblock %}

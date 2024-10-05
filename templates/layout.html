@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Recommendation de films{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/partials.css' %}">
+    <link rel="stylesheet" href="{% static 'css/colors.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <header>
+        <h1>{% block header %}Quel film est fait pour toi ?{% endblock %}</h1>
+        <button id="menu-toggle" class="burger-menu">☰</button>
+        <nav id="main-nav">
+            <ul>
+                {% if request.session.username %}
+                    <li style="color:green;">Bonjour, {{ request.session.username }}</li>
+                    <li><a href="{% url 'profile' %}">Mon compte</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'movies_list' %}">Accueil</a></li>
+                    <li><a href="{% url 'movies_list' %}">Liste des Films</a></li>
+                    <li><a href="{% url 'reco_form' %}" class="special">Recommande moi un film !</a></li>
+                    {% if request.session.username %}
+                        <li><a href="{% url 'logout' %}" class="link-red">Déconnexion</a></li>
+                        {% if request.session.role == 'admin' %}
+                            <li><a href="{% url 'admin' %}">Administration</a></li>
+                        {% endif %}
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Connexion</a></li>
+                        <li><a href="{% url 'register' %}">Inscription</a></li>
+                    {% endif %}
+                <!-- Barre de recherche -->
+                <li>
+                    <form action="{% url 'movies_list' %}" method="get" class="search-form">
+                        <input type="text" name="search" placeholder="Rechercher un film">
+                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="subheader">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy;2024</p>
+    </footer>
+    <script>
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            var nav = document.getElementById('main-nav');
+            nav.classList.toggle('show');
+        });
+    </script>
+</body>
+</html>

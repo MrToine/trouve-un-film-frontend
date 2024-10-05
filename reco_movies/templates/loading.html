@@ -1,0 +1,70 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1 id="loading-message-title">Chargement des recommandations...</h1>
+
+<div id="loading-message">
+    <center><div class="loader"></div></center>
+</div>
+
+<div id="content"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function checkRecommendations() {
+        fetch("{% url 'check_recommendations' %}?cache_key={{ cache_key }}")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                console.log(response);
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'ready') {
+                    // Recommandations prêtes, mettre à jour la page
+                    console.log('Recommandations prêtes:');
+                    const contentElement = document.getElementById('content');
+                    const loadingElement = document.getElementById('loading-message');
+                    const titleElement = document.getElementById('loading-message-title');
+                    
+                    if (contentElement) {
+                        contentElement.innerHTML = renderRecommendations(data.recommendations);
+                    }
+                    
+                    if (loadingElement) {
+                        loadingElement.style.display = 'none';
+                    }
+                    
+                    if (titleElement) {
+                        titleElement.textContent = 'Recommandations';
+                    }
+                } else {
+                    // Continuer à vérifier
+                    console.log('Recommandations pas encore prêtes');
+                    setTimeout(checkRecommendations, 2000);  // Vérifier toutes les 2 secondes
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const loadingElement = document.getElementById('loading-message');
+                if (loadingElement) {
+                    loadingElement.innerHTML = 'Une erreur est survenue lors du chargement des recommandations.';
+                }
+            });
+    }
+
+    function renderRecommendations(recommendations) {
+        let html = '<ul>';
+        for (let rec of recommendations) {
+            html += `<li><a href="/movies/${rec.id}">${rec.title}</a> (${rec.year}) - Score: ${rec.score.toFixed(2)}</li>`;
+        }
+        html += '</ul>';
+        return html;
+    }
+
+    // Commencer à vérifier les recommandations
+    checkRecommendations();
+});
+</script>
+{% endblock %}

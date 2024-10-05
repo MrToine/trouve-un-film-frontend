@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block title %}Résultats des recommandations{% endblock %}
+
+{% block content %}
+
+<h1>Films recommandés</h1>
+
+<ul>
+    {% for movie in recommendations %}
+        {% if movie.id %}
+            <li>
+                <a href="{% url 'movie_detail' movie.id %}">{{ movie.title }}</a> ({{ movie.year }})
+                - Score de similarité : {{ movie.score|floatformat:2 }}
+                {% if recommandation.liked_by_user %}
+                    <span class="liked">- Déjà aimé</span>
+                {% else %}
+                    <a href=""><i class="fa-regular fa-heart"></i></a>
+                {% endif %}
+            </li>
+        {% endif %}
+    {% empty %}
+        <li>Aucune recommandation trouvée.</li>
+    {% endfor %}
+</ul>
+
+<div class="search-criteria">
+    <h2>Critères de recherche :</h2>
+    <p>
+        {% if genres %}Genres : {{ genres|join:", " }}{% endif %}
+        {% if director %}{% if genres %} | {% endif %}Réalisateur : {{ director }}{% endif %}
+        {% if actors %}{% if genres or director %} | {% endif %}Acteurs : {{ actors|join:", " }}{% endif %}
+    </p>
+</div>
+
+<div class="back-link">
+    <a href="{% url 'reco_form' %}">Retour au formulaire de recherche</a>
+</div>
+
+{% endblock %}

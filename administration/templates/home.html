@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% block title %}Liste des films{% endblock %}
+{% block content %}
+    <h1>Administration</h1>
+    <div class="alert alert-info">
+        <p>Bienvenue sur la page d'administration.</p>
+        <p>Vous êtes connecté en tant qu'administrateur. Vous avez sur cette page, la possibilité de gérer les différents modules de l'application.</p>
+    </div>
+
+    <h2>Message d'info rapide</h2>
+    <p>Vous pouvez afficher/cacher un message d'info rapide ici. Ce message est affiché juste sous le menu. <span style="color:brown">(Laisser vide pour cacher le message)</span></p>
+    <form action="{% url 'admin' %}" method="post">
+        {% csrf_token %}
+        <label for="info_message">Message d'info rapide</label>
+        <textarea name="info_message" id="info_message" cols="30" rows="10">{{ info_message.content }}</textarea>
+        <button type="submit">Enregistrer</button>
+    </form>
+
+{% endblock %}

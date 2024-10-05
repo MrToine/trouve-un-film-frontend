@@ -1,0 +1,89 @@
+{% extends 'layout.html' %}
+{% block title %}Liste des films{% endblock %}
+{% block content %}
+
+{% if info_message.content != '' %}
+
+<div class="alert alert-info">
+    <p>{{ info_message.content }}</p>
+</div>
+
+{% endif %}
+
+{% if search %}
+    <h1>Résultats de la recherche pour "{{ search }}"</h1>
+{% else %}
+    <h1>Liste des films</h1>
+{% endif %}
+
+{% if not movies %}
+    <p>Aucun film trouvé</p>
+{% endif %}
+
+<ul>
+{% for movie in movies %}
+    <li>
+        <a href="{% url 'movie_detail' movie.id %}" class="normal">
+            <div class="card_movie">
+                <div class="poster">
+                    <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                </div>
+                <div class="info">
+                    <center><h2>{{ movie.title }}<h2></center>
+                    <p><strong>Réalisateur : </strong> 
+                        {% for realisator in movie.realisators %}
+                            {{ realisator.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p><strong>Sortie: </strong> {{ movie.year }}</p>
+                    <p><strong>Genre : </strong> 
+                    {% for genre in movie.genres %}
+                        {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                    </p>
+                    <hr>
+                    <!-- Synopsis sur 50 premiers mots -->
+                    <p>{{ movie.synopsis|truncatewords:20 }}</p>
+                    <div class="like">
+                        {% if movie.liked_by_user %}
+                            <a href="{% url 'unlike_movie' movie.id %}" class="liked">
+                                <i class="fa-solid fa-heart"></i>
+                            </a>
+                            <p>Unlike</p>
+                        {% else %}
+                            <a href="{% url 'like_movie' movie.id %}">
+                                <i class="fa-regular fa-heart"></i>
+                            </a>
+                            <p>Like</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </a>
+    </li>
+{% endfor %}
+</ul>
+
+<div class="pagination">
+    {% if has_previous %}
+        <a href="?page=1{% if search %}&search={{ search }}{% endif %}">« Première</a>
+        <a href="?page={{ previous_page }}{% if search %}&search={{ search }}{% endif %}">‹ Précédent</a>
+    {% endif %}
+
+    {% for p in page_range %}
+        {% if p == page %}
+            <span class="current">{{ p }}</span>
+        {% else %}
+            <a href="?page={{ p }}{% if search %}&search={{ search }}{% endif %}">{{ p }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if has_next %}
+        <a href="?page={{ next_page }}{% if search %}&search={{ search }}{% endif %}">Suivant ›</a>
+        <a href="?page={{ total_pages }}{% if search %}&search={{ search }}{% endif %}">Dernière »</a>
+    {% endif %}
+</div>
+
+<p>Page {{ page }} sur {{ total_pages }}</p>
+
+{% endblock %}
