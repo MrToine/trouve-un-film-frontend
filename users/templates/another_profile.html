@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% load custom_filters %}
+
+{% block title %}Profil de {{ user.username }}{% endblock %}
+
+{% block content %}
+    <h2>Page Personnelle de {{ user.username }}</h2>
+    <ul class="page-messages-list">
+        {% for post in user.posts %}
+            <li class="page-message">
+                <p><strong>Publié le {{ post.created_at|parse_datetime }}</strong></p>
+                <p>{{ post.content|safe|linebreaksbr }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

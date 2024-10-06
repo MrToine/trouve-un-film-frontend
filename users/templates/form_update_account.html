@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% load custom_filters %}
+
+{% block title %}Modifier mon compte{% endblock %}
+
+{% block content %}
+<h1>Modifier mon compte</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <h2>Informations utilisateur</h2>
+    {{ user_form.as_p }}
+    
+    <h2>Informations de profil</h2>
+    {{ profile_form.as_p }}
+    
+    <button type="submit">Mettre à jour</button>
+</form>
+
+{% endblock %}

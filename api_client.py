@@ -30,7 +30,7 @@ class FlaskAPIClient:
         response = requests.post(url, json=data)
         return response.json(), response.status_code
     
-    def get_user_profile(self, auth_token):
+    def get_user_auth(self, auth_token):
         url = f"{self.base_url}/api/users/profile"
         headers = {
             "Authorization": f"Bearer {auth_token}"
@@ -39,6 +39,42 @@ class FlaskAPIClient:
         response = requests.get(url, headers=headers)
 
         return response
+
+    def get_user_profile(self, user_id, auth_token):
+        url = f"{self.base_url}/api/users/profile/{user_id}"
+        headers = {
+            "Authorization": f"Bearer {auth_token}"
+        }
+        
+        response = requests.get(url, headers=headers)
+
+        return response.json()
+
+    def activation_social_profile(self, active, auth_token, user_id):
+        url = f"{self.base_url}/api/users/profile/{user_id}"
+        headers = {
+            "Authorization": f"Bearer {auth_token}"
+        }
+
+        response = requests.patch(url, json=active, headers=headers)
+        return response.json(), response.status_code
+
+    def update_profile(self, update_data, auth_token, user_id):
+        url = f"{self.base_url}/api/users/profile/{user_id}"
+        headers = {
+            "Authorization": f"Bearer {auth_token}"
+        }
+        response = requests.patch(url, json=update_data, headers=headers)
+        return response.json(), response.status_code
+
+    def create_post(self, post, auth_token, user_id):
+        url = f"{self.base_url}/api/posts/{user_id}"
+        headers = {
+            "Authorization": f"Bearer {auth_token}"
+        }
+
+        response = requests.post(url, json=post, headers=headers)
+        return response.json(), response.status_code
     
     def get_user(self, user_id):
         # On récupère les informations de l'utilisateur

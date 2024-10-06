@@ -6,6 +6,14 @@ a.link-red:hover {
     color: #bd2130;
 }
 
+a.link-orange {
+    color: #fd7e14;
+}
+
+a.link-orange:hover {
+    color: #d5600f;
+}
+
 nav ul li a {
     text-decoration: none;
     color: #fff;

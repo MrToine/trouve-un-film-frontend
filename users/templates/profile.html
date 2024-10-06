@@ -1,26 +1,103 @@
 {% extends 'layout.html' %}
+{% load custom_filters %}
 
 {% block title %}Profil de {{ user.username }}{% endblock %}
 
 {% block content %}
-    <h1>Profil de {{ user.username }}</h1>
-
-    <p><strong>Nom d'utilisateur : </strong>{{ user.username }}</p>
-    <p><strong>Email : </strong>{{ user.email }}</p>
-
-    <h2>Films aimés</h2>
-    <div class="grid-container">
-        {% for movie in liked_movies %}
-            <div class="grid-item">
-                <div class="card_movie">
-                        <a href="{% url 'movie_detail' movie.id %}" class="normal">
-                        <h3>{{ movie.title }}</h3>
-                        <div class="poster">
-                            <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+    {% if user.profile.active == False %}
+        <div class="alert alert-warning" role="alert">
+            <p>Depuis la mise à jour du <strong>06/10/2024</strong>, il est possible d'activer ou de désactiver son profil. Si vous souhaitez activer votre profil, veuillez cliquer sur le bouton ci-dessous pour le rendre actif.</p>
+            <p><u>Note:</u> Activer son profil, permet d'avoir accès à l'environnement social de la plateforme.</p>
+            <form action="{% url 'activation_social_profile' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="active" value="{{ user.profil.active }}">
+                <button type="submit" class="primary">Activer mon profil</button>
+            </form>
+        </div>
+    
+        <h1>Mon profil privée</h1>
+    
+        <p><strong>Nom d'utilisateur : </strong>{{ user.username }}</p>
+        <p><strong>Email : </strong>{{ user.email }}</p>
+    
+        <h2>Films aimés</h2>
+        <div class="grid-container">
+            {% for movie in liked_movies %}
+                <div class="grid-item">
+                    <div class="card_movie">
+                            <a href="{% url 'movie_detail' movie.id %}" class="normal">
+                            <h3>{{ movie.title }}</h3>
+                            <div class="poster">
+                                <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
+                {% endfor %}
             </div>
-        {% endfor %}
-    </div>
+        {% else %}
+            <h1>Mon profil Social</h1>
+        <div class="profile-nav">
+            <ul>
+                <li><a href="{% url 'profile_page' 'account' %}" {% if page == 'account' %}class="active"{% endif %}>Mon Profil</a></li>
+                <li><a href="{% url 'profile_page' 'page' %}" {% if page == 'page' %}class="active"{% endif %}>Ma Page</a></li>
+                <li><a href="{% url 'profile_page' 'likes' %}" {% if page == 'likes' %}class="active"{% endif %}>Mes Likes</a></li>
+                <!-- <li><a href="{% url 'profile_page' 'messages' %}" {% if page == 'messages' %}class="active"{% endif %}>strike>Messages</a></li> -->
+                <!-- <li><a href="{% url 'profile_page' 'params' %}" {% if page == 'params' %}class="active"{% endif %}>Paramètres</a></li> -->
+            </ul>
+        </div>
+        {% if page == 'account' %}
+            <h2>Mes infos</h2>
+            <h3>Info de connexion & contact</h3>
+            <p><strong>Nom d'utilisateur : </strong>{{ user.username }}</p>
+            <p><strong>Email : </strong>{{ user.email }}</p>
+            <h3>Informations personnelles</h3>
+            <p><strong>Prénom : </strong>{{ user.profile.first_name }}</p>
+            <p><strong>Nom : </strong>{{ user.profile.last_name }}</p>
+            <p><strong>Date de naissance : </strong>{{ user.profile.birth_date }}</p>
+            <!-- <h3>Adresse</h3>
+            <p><strong>Adresse : </strong>{{ user.profile.address }}</p>
+            <p><strong>Code postal : </strong>{{ user.profile.zip_code }}</p>
+            <p><strong>Ville : </strong>{{ user.profile.city }}</p> -->
+            <center><a href="{% url 'profile_update' %}" class="link-orange">Modifier mes infos</a></center>
+        {% endif %}
+
+        {% if page == 'page' %}
+            <h2>Ma page</h2>
+            <form action="{% url 'profile_create_post' %}" method="post">
+                {% csrf_token %}
+                <textarea class="page-message" name="message" id="message" placeholder="Quoi de neuf, {{ user.profile.firstname }} ?"></textarea>
+                <button type="submit" class="primary">Publier</button>
+            </form>
+            <ul class="page-messages-list">
+                {% for post in user.posts %}
+                    <li class="page-message">
+                        <p><strong>Publié le {{ post.created_at|parse_datetime }}</strong></p>
+                        <p>{{ post.content|safe|linebreaksbr }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if page == 'likes' %}
+            <h2>Films aimés</h2>
+            <div class="grid-container">
+                {% for movie in liked_movies %}
+                    <div class="grid-item">
+                        <div class="card_movie">
+                                <a href="{% url 'movie_detail' movie.id %}" class="normal">
+                                <h3>{{ movie.title }}</h3>
+                                <div class="poster">
+                                    <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if page == 'params' %}
+            rien
+        {% endif %}
+    {% endif %}
 {% endblock %}

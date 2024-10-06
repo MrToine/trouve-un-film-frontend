@@ -95,7 +95,7 @@ def like_movie(request, movie_id):
     else:
         redirect_url = reverse('movies_list')
 
-    return redirect(redirect_url)
+    return redirect(redirect_url + '#movie-' + str(movie_id))
 
 def unlike_movie(request, movie_id):
     if not request.session.get("user_id"):
