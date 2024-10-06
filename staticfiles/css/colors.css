@@ -1,0 +1,68 @@
+a.link-red {
+    color: #dc3545;
+}
+
+a.link-red:hover {
+    color: #bd2130;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #333;
+}
+
+nav ul li a.special {
+    text-decoration: none;
+    background-color: #0da1ac;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a.special:hover {
+    background-color: #0e656b;
+}
+
+main ul li a {
+    text-decoration: none;
+    color: #193c7e;
+}
+
+a.normal {
+    color: #333333;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+a.liked {
+    color: #d81c1c;
+}
+
+a.liked:hover {
+    color: #333;
+}
+
+a.reco-perso {
+    text-decoration: none;
+    background-color: #7cdd2c;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 4px;
+    border: 1px solid #3d7711;
+    transition: background-color 0.3s ease;
+}
+
+a.reco-perso:hover {
+    background-color: #4c7f0e;
+    color: #fff;
+}
