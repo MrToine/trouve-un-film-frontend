@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/partials.css' %}">
     <link rel="stylesheet" href="{% static 'css/colors.css' %}">
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -19,7 +20,7 @@
             <ul>
                 {% if request.session.username %}
                     <li style="color:green;">Bonjour, {{ request.session.username }}</li>
-                    <li><a href="{% url 'profile' %}">Mon compte</a></li>
+                    <li><a href="{% url 'profile_page' 'account' %}">Espace personnel</a></li>
                     {% endif %}
                     <li><a href="{% url 'movies_list' %}">Accueil</a></li>
                     <li><a href="{% url 'movies_list' %}">Liste des Films</a></li>

@@ -5,7 +5,7 @@
 {% if info_message.content != '' %}
 
 <div class="alert alert-info">
-    <p>{{ info_message.content }}</p>
+    <p>{{ info_message.content|safe|linebreaksbr }}</p>
 </div>
 
 {% endif %}
@@ -20,49 +20,51 @@
     <p>Aucun film trouvé</p>
 {% endif %}
 
-<ul>
-{% for movie in movies %}
-    <li>
-        <a href="{% url 'movie_detail' movie.id %}" class="normal">
-            <div class="card_movie">
-                <div class="poster">
-                    <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                </div>
-                <div class="info">
-                    <center><h2>{{ movie.title }}<h2></center>
-                    <p><strong>Réalisateur : </strong> 
-                        {% for realisator in movie.realisators %}
-                            {{ realisator.name }}{% if not forloop.last %}, {% endif %}
+<div class="movie-page">
+    <ul>
+    {% for movie in movies %}
+        <li id="movie-{{ movie.id }}">
+            <a href="{% url 'movie_detail' movie.id %}" class="normal">
+                <div class="card_movie">
+                    <div class="poster">
+                        <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                    </div>
+                    <div class="info">
+                        <center><h2>{{ movie.title }}<h2></center>
+                        <p><strong>Réalisateur : </strong> 
+                            {% for realisator in movie.realisators %}
+                                {{ realisator.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p><strong>Sortie: </strong> {{ movie.year }}</p>
+                        <p><strong>Genre : </strong> 
+                        {% for genre in movie.genres %}
+                            {{ genre.name }}{% if not forloop.last %}, {% endif %}
                         {% endfor %}
-                    </p>
-                    <p><strong>Sortie: </strong> {{ movie.year }}</p>
-                    <p><strong>Genre : </strong> 
-                    {% for genre in movie.genres %}
-                        {{ genre.name }}{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                    </p>
-                    <hr>
-                    <!-- Synopsis sur 50 premiers mots -->
-                    <p>{{ movie.synopsis|truncatewords:20 }}</p>
-                    <div class="like">
-                        {% if movie.liked_by_user %}
-                            <a href="{% url 'unlike_movie' movie.id %}" class="liked">
-                                <i class="fa-solid fa-heart"></i>
-                            </a>
-                            <p>Unlike</p>
-                        {% else %}
-                            <a href="{% url 'like_movie' movie.id %}">
-                                <i class="fa-regular fa-heart"></i>
-                            </a>
-                            <p>Like</p>
-                        {% endif %}
+                        </p>
+                        <hr>
+                        <!-- Synopsis sur 50 premiers mots -->
+                        <p>{{ movie.synopsis|truncatewords:20 }}</p>
+                        <div class="like">
+                            {% if movie.liked_by_user %}
+                                <a href="{% url 'unlike_movie' movie.id %}" class="liked">
+                                    <i class="fa-solid fa-heart"></i>
+                                </a>
+                                <p>Unlike</p>
+                            {% else %}
+                                <a href="{% url 'like_movie' movie.id %}">
+                                    <i class="fa-regular fa-heart"></i>
+                                </a>
+                                <p>Like</p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </li>
-{% endfor %}
-</ul>
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
 
 <div class="pagination">
     {% if has_previous %}

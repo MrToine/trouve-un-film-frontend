@@ -3,3 +3,5 @@ __pycache__
 webapp/settings.py
 *.db
 venv
+staticfiles
+db.sqlite3

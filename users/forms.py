@@ -17,3 +17,12 @@ class UserRegistrationForm(forms.Form):
 class UserLoginForm(forms.Form):
     username = forms.CharField(label='Username', max_length=150)
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
+
+class UserUpdateForm(forms.Form):
+    email = forms.EmailField()
+
+class ProfileUpdateForm(forms.Form):
+    first_name = forms.CharField(max_length=64, required=False)
+    last_name = forms.CharField(max_length=64, required=False)
+    birth_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+    biography = forms.CharField(widget=forms.Textarea, required=False)
